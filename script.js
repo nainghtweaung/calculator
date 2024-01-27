@@ -41,22 +41,43 @@ displayValue.textContent = currentValue;
 
 operators.forEach((operator) => {
   operator.addEventListener("click", () => {
-    if (firstVariable === "" && secondVariable === "") {
+    if (
+      firstVariable === "" ||
+      (secondVariable === "" && operator.dataset.type === "=")
+    ) {
       return;
     }
-    // If currentOperator is not empty and equal was pressed calculate
     console.log(operator.dataset.type);
-    if (currentOperator !== "") {
+    // If currentOperator is not empty and equal was pressed calculate
+    if (
+      currentOperator !== "" &&
+      firstVariable !== "" &&
+      secondVariable !== ""
+    ) {
       currentValue = operate(firstVariable, secondVariable, currentOperator);
       displayValue.textContent = currentValue;
       firstVariable = currentValue;
       secondVariable = "";
-      currentOperator = "";
+      currentOperator = operator.dataset.type;
+      if (currentValue === Infinity || isNaN(currentValue)) {
+        displayValue.textContent = "lmao";
+      }
+      return;
+    } else if (
+      currentOperator !== "" &&
+      firstVariable !== "" &&
+      secondVariable === ""
+    ) {
+      currentValue = operate(firstVariable, firstVariable, currentOperator);
+      displayValue.textContent = currentValue;
+      firstVariable = currentValue;
+      currentOperator = operator.dataset.type;
+      if (currentValue === Infinity || isNaN(currentValue)) {
+        displayValue.textContent = "lmao";
+      }
       return;
     }
-    if (currentOperator === "" && operator.dataset.type !== "=") {
-      currentOperator = operator.dataset.type;
-    }
+    currentOperator = operator.dataset.type;
   });
 });
 
@@ -67,6 +88,9 @@ numbers.forEach((number) => {
       secondVariable += number.dataset.value;
       displayValue.textContent = secondVariable;
 
+      return;
+    }
+    if (displayValue.textContent === "0" && number.dataset.value === "0") {
       return;
     }
     // Store value in first variable only if current operator is null
@@ -86,6 +110,42 @@ numbers.forEach((number) => {
 
 specialOperators.forEach((operator) => {
   operator.addEventListener("click", () => {
-    console.log(operator.dataset.type);
+    if (operator.dataset.type === "AC") {
+      clear();
+    } else if (operator.dataset.type === "+/-") {
+      changeSign();
+    } else {
+      convertToPercentage();
+    }
   });
 });
+
+function clear() {
+  firstVariable = "";
+  secondVariable = "";
+  currentOperator = "";
+  currentValue = 0;
+  displayValue.textContent = 0;
+}
+
+function changeSign() {
+  // First check if second variable is empty or not.
+  // change signs if not empty
+  if (secondVariable !== "") {
+    secondVariable *= -1;
+    displayValue.textContent = secondVariable;
+  } else {
+    firstVariable *= -1;
+    displayValue.textContent = firstVariable;
+  }
+}
+
+function convertToPercentage() {
+  if (secondVariable !== "") {
+    secondVariable /= 100;
+    displayValue.textContent = secondVariable;
+  } else {
+    firstVariable /= 100;
+    displayValue.textContent = firstVariable;
+  }
+}
