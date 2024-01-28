@@ -58,12 +58,12 @@ operators.forEach((operator) => {
       secondVariable !== ""
     ) {
       currentValue = operate(firstVariable, secondVariable, currentOperator);
-      displayValue.textContent = currentValue;
+      updateDisplayValue(currentValue);
       firstVariable = currentValue;
       secondVariable = "";
       currentOperator = operator.dataset.type;
       if (currentValue === Infinity || isNaN(currentValue)) {
-        displayValue.textContent = "lmao";
+        updateDisplayValue("lmao");
       }
       return;
       // } else if (
@@ -90,12 +90,12 @@ numbers.forEach((number) => {
     if (currentOperator === "=") {
       clear();
       firstVariable += number.dataset.value;
-      displayValue.textContent = firstVariable;
+      updateDisplayValue(firstVariable);
       return;
     }
     if (firstVariable !== "" && currentOperator !== "") {
       secondVariable += number.dataset.value;
-      displayValue.textContent = secondVariable;
+      updateDisplayValue(secondVariable);
 
       return;
     }
@@ -109,10 +109,10 @@ numbers.forEach((number) => {
     }
     if (currentOperator === "") {
       firstVariable += number.dataset.value;
-      displayValue.textContent = firstVariable;
+      updateDisplayValue(firstVariable);
     } else {
       secondVariable += number.dataset.value;
-      displayValue.textContent = secondVariable;
+      updateDisplayValue(secondVariable);
     }
   });
 });
@@ -127,13 +127,13 @@ specialOperators.forEach((operator) => {
       if (!displayValue.textContent.includes(".")) {
         if (firstVariable === "") {
           firstVariable = "0.5";
-          displayValue.textContent = firstVariable;
+          updateDisplayValue(firstVariable);
         } else if (firstVariable !== "" && currentOperator !== "") {
           secondVariable += ".";
-          displayValue.textContent = secondVariable;
+          updateDisplayValue(secondVariable);
         } else if (firstVariable !== "") {
           firstVariable += ".";
-          displayValue.textContent = firstVariable;
+          updateDisplayValue(firstVariable);
         }
       }
     } else {
@@ -147,7 +147,7 @@ function clear() {
   secondVariable = "";
   currentOperator = "";
   currentValue = 0;
-  displayValue.textContent = 0;
+  updateDisplayValue(0);
 }
 
 function changeSign() {
@@ -155,19 +155,23 @@ function changeSign() {
   // change signs if not empty
   if (secondVariable !== "") {
     secondVariable *= -1;
-    displayValue.textContent = String(secondVariable);
+    updateDisplayValue(String(secondVariable));
   } else {
     firstVariable *= -1;
-    displayValue.textContent = String(firstVariable);
+    updateDisplayValue(String(firstVariable));
   }
 }
 
 function convertToPercentage() {
   if (secondVariable !== "") {
     secondVariable /= 100;
-    displayValue.textContent = secondVariable;
+    updateDisplayValue(secondVariable);
   } else {
     firstVariable /= 100;
-    displayValue.textContent = firstVariable;
+    updateDisplayValue(firstVariable);
   }
+}
+
+function updateDisplayValue(value) {
+  displayValue.textContent = value;
 }

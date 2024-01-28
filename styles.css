@@ -4,6 +4,17 @@
   box-sizing: border-box;
 }
 
+html {
+  --primary-color: hsl(120deg 80% 70%);
+  --primary-color-dark: hsl(120deg 50% 40%);
+  --secondary-color: hsl(341deg 86% 67%);
+  --secondary-color-dark: hsl(341deg 50% 40%);
+  --accent-color: hsl(25, 50%, 49%);
+  --accent-color-light: hsla(35, 100%, 49%, 1);
+  --background-color: hsla(242, 100%, 85%, 1);
+  --calculator-display-color: hsla(84, 12%, 37%, 1);
+}
+
 body {
   padding: 0;
   margin: 0;
@@ -15,12 +26,12 @@ body {
 
 .container {
   width: 400px;
-  background-color: hsl(240deg 40% 80%);
+  background-color: var(--background-color);
   padding: 16px;
 }
 
 .display {
-  background-color: hsl(320deg 30% 70%);
+  background-color: var(--calculator-display-color);
   height: 70px;
   padding: 8px 16px;
   margin-bottom: 12px;
@@ -29,6 +40,7 @@ body {
   justify-content: flex-end;
   font-weight: bold;
   font-size: 3rem;
+  color: hsla(84, 100%, 52%, 1);
 }
 
 .button-wrapper {
@@ -53,6 +65,7 @@ button {
   height: calc(var(--size) - 20px);
   font-weight: bold;
   font-size: 1.5rem;
+  border-radius: 4px;
 }
 
 .operator.all_clear {
@@ -62,4 +75,19 @@ button {
 .number[data-value="0"] {
   --size: calc(((400px - 32px) / 2));
   height: calc((var(--size) / 2) - 20px);
+}
+
+button.number {
+  background-color: var(--primary-color);
+  border: 2px solid var(--primary-color-dark);
+}
+
+button.operator {
+  background-color: var(--secondary-color);
+  border: 2px solid var(--secondary-color-dark);
+}
+
+button.special-operator {
+  background-color: var(--accent-color-light);
+  border: 2px solid var(--accent-color);
 }
