@@ -20,6 +20,9 @@ let currentOperator = "";
 let currentValue = 0;
 
 function operate(num1, num2, operator) {
+  if (operator === "=") {
+    return;
+  }
   switch (operator) {
     case "+":
       return add(num1, num2);
@@ -63,19 +66,19 @@ operators.forEach((operator) => {
         displayValue.textContent = "lmao";
       }
       return;
-    } else if (
-      currentOperator !== "" &&
-      firstVariable !== "" &&
-      secondVariable === ""
-    ) {
-      currentValue = operate(firstVariable, firstVariable, currentOperator);
-      displayValue.textContent = currentValue;
-      firstVariable = currentValue;
-      currentOperator = operator.dataset.type;
-      if (currentValue === Infinity || isNaN(currentValue)) {
-        displayValue.textContent = "lmao";
-      }
-      return;
+      // } else if (
+      //   currentOperator !== "" &&
+      //   firstVariable !== "" &&
+      //   secondVariable === ""
+      // ) {
+      //   currentValue = operate(firstVariable, firstVariable, currentOperator);
+      //   displayValue.textContent = currentValue;
+      //   firstVariable = currentValue;
+      //   currentOperator = operator.dataset.type;
+      //   if (currentValue === Infinity || isNaN(currentValue)) {
+      //     displayValue.textContent = "lmao";
+      //   }
+      //   return;
     }
     currentOperator = operator.dataset.type;
   });
@@ -84,6 +87,12 @@ operators.forEach((operator) => {
 numbers.forEach((number) => {
   number.addEventListener("click", () => {
     console.log(number.dataset.value);
+    if (currentOperator === "=") {
+      clear();
+      firstVariable += number.dataset.value;
+      displayValue.textContent = firstVariable;
+      return;
+    }
     if (firstVariable !== "" && currentOperator !== "") {
       secondVariable += number.dataset.value;
       displayValue.textContent = secondVariable;
@@ -114,6 +123,19 @@ specialOperators.forEach((operator) => {
       clear();
     } else if (operator.dataset.type === "+/-") {
       changeSign();
+    } else if (operator.dataset.type === ".") {
+      if (!displayValue.textContent.includes(".")) {
+        if (firstVariable === "") {
+          firstVariable = "0.5";
+          displayValue.textContent = firstVariable;
+        } else if (firstVariable !== "" && currentOperator !== "") {
+          secondVariable += ".";
+          displayValue.textContent = secondVariable;
+        } else if (firstVariable !== "") {
+          firstVariable += ".";
+          displayValue.textContent = firstVariable;
+        }
+      }
     } else {
       convertToPercentage();
     }
@@ -133,10 +155,10 @@ function changeSign() {
   // change signs if not empty
   if (secondVariable !== "") {
     secondVariable *= -1;
-    displayValue.textContent = secondVariable;
+    displayValue.textContent = String(secondVariable);
   } else {
     firstVariable *= -1;
-    displayValue.textContent = firstVariable;
+    displayValue.textContent = String(firstVariable);
   }
 }
 
